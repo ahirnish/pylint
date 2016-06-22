@@ -110,6 +110,10 @@ MSGS = {
               ('Used when a function call does not pass a mandatory'
                ' keyword-only argument.'),
               {'minversion': (3, 0)}),
+    'W1125': ('Keyword argument before variable postional aguments list',
+              'keyword-arg-before-vararg',
+              'Used when a keyword argument is defined before *args. There would be '
+              'no way to not specify keyword arg but specigy *args.'),
     'E1126': ('Sequence index is not an int, slice, or instance with __index__',
               'invalid-sequence-index',
               'Used when a sequence type is indexed with an invalid type. '
@@ -711,6 +715,11 @@ accessed. Python regular expressions are accepted.'}
             if defval is None and not assigned and not has_no_context_keywords_variadic:
                 self.add_message('missing-kwoa', node=node,
                                  args=(name, callable_name))
+
+        # Check for any keyword parameter before variable length parameters
+        # (*args)
+        if called.args.vararg and called.args.defaults:
+            self.add_message('keyword-arg-before-vararg', node=node)
 
     @check_messages('invalid-sequence-index')
     def visit_extslice(self, node):
