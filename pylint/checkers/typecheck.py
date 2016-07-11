@@ -110,7 +110,7 @@ MSGS = {
               ('Used when a function call does not pass a mandatory'
                ' keyword-only argument.'),
               {'minversion': (3, 0)}),
-    'W1125': ('Keyword argument before variable postional aguments list',
+    'W1125': ('Keyword argument before variable postional aguments list in %s call of %s function',
               'keyword-arg-before-vararg',
               'Used when a keyword argument is defined before *args. There would be '
               'no way to not specify keyword arg but specigy *args.'),
@@ -719,7 +719,8 @@ accessed. Python regular expressions are accepted.'}
         # Check for any keyword parameter before variable length parameters
         # (*args)
         if called.args.vararg and called.args.defaults:
-            self.add_message('keyword-arg-before-vararg', node=node)
+            self.add_message('keyword-arg-before-vararg', node=node,
+                             args=(callable_name, node.func.as_string()))
 
     @check_messages('invalid-sequence-index')
     def visit_extslice(self, node):
